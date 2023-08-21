@@ -442,7 +442,7 @@ Design and download your logo using [hexmake](https://connect.thinkr.fr/hexmake/
 Implement using:
 
 ```{r}
-use_logo("C:/Users/sknapp/OneDrive - Sumitomo Pharma Oncology/Pictures/hex_logos/hex-sdtmval.png")
+use_logo("[PATH TO LOGO]")
 ```
 
 The code ran in the previous chunk will add html code to your clipboard. Paste that into README.Rmd where the title is. Then rebuild the README:
