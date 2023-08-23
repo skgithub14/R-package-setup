@@ -4,5 +4,5 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-See create-an-r-package.html
+See [https://rpubs.com/stephenknapp/how-to-create-an-r-package](https://rpubs.com/stephenknapp/how-to-create-an-r-package)
 
