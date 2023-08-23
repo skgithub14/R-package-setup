@@ -141,7 +141,7 @@ Update these fields:
  
  - Title
  
- - Authors (this should be auto-populated if you followed the [the {usethis} set-up guide](https://usethis.r-lib.org/articles/usethis-setup.html))
+ - Authors (this should be auto-populated if you followed [the {usethis} set-up guide](https://usethis.r-lib.org/articles/usethis-setup.html))
  
  - Description
  
