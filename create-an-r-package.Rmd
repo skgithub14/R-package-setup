@@ -1,0 +1,610 @@
+---
+title: "How to Create an R Package"
+author: "Stephen Knapp"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+```
+
+This document shows the set-up steps for a new R package using the {devtools}/{usethis} framework 
+
+### Features
+
+This guide describes how to create an R package with the following features:
+
+ - **Version control using git and remote repo hosted on GitHub:**
+ 
+   - Automated GitHub actions for R CMD build with README badge
+   
+   - Automated documentation and code styling with pull requests
+ 
+ - **Testing:**
+ 
+   - Unit testing using {testthat}
+ 
+   - Automated GitHub actions for code testing coverage using CodeCov and {covr} with CodeCov README badge
+   
+ - **{pkgdown} website hosted on GitHub Pages**
+ 
+ - **Internal and external data files**
+ 
+ - **Documentation:**
+   
+   - Function and data documentation using {roxygen2}
+   
+   - README using a .Rmd file
+   
+   - NEWS.md
+   
+   - Articles and vignettes
+   
+   - DESCRIPTION file set-up with license
+   
+ - **Hex logo**
+ 
+ - **Code styling using {styler}**
+
+ 
+### Prerequisite
+
+This document assumes your machine was previously configured according to [the {usethis} set-up guide](https://usethis.r-lib.org/articles/usethis-setup.html)
+ 
+
+## Steps
+
+### Initial Set-up
+
+#### 1. Check the package name is available:
+
+```{r}
+available::available("[PROPOSED PACKAGE NAME]")
+```
+
+Reference: [https://r-pkgs.org/workflow101.html#use-the-available-package](https://r-pkgs.org/workflow101.html#use-the-available-package)
+
+#### 2. Create a new directory
+
+```{r}
+dir.create("[PATH TO PACKAGE]")
+```
+
+
+#### 3. Set-up the directory as an R package:
+
+```{r}
+setwd("[PATH TO PACKAGE]")
+create_package()
+```
+
+Reference: [https://r-pkgs.org/whole-game.html#create_package](https://r-pkgs.org/whole-game.html#create_package)
+
+
+### Version control using git and GitHub
+
+#### 4. Set-up local version control
+
+```{r}
+use_git()
+```
+
+Next, make your first commit using the terminal using the git commands add and commit.
+
+Reference: [https://r-pkgs.org/whole-game.html#use_git](https://r-pkgs.org/whole-game.html#use_git)
+
+#### 5. Create a GitHub remote repository
+
+```{r}
+# if you did step 5, ignore the first message about uncommitted changes
+use_github()
+```
+
+Reference: [https://r-pkgs.org/whole-game.html#use_github](https://r-pkgs.org/whole-game.html#use_github)
+
+
+### Package Documentation
+
+#### 6. Populate the DESCRIPTION file
+
+Update these fields:
+ 
+ - Title
+ 
+ - Authors
+ 
+ - Description
+ 
+ - Chose a license:
+
+```{r}
+# in this case the MIT license, which is one of the most permissive
+use_mit_license()
+```
+
+References: 
+
+ - DESCRIPTION file: [https://r-pkgs.org/description.html](https://r-pkgs.org/description.html)
+ 
+ - Licensing: [https://r-pkgs.org/license.html](https://r-pkgs.org/license.html)
+
+#### 7. Create a README using Rmarkdown
+
+```{r}
+use_readme_rmd()
+```
+
+After populating the basic information in the README.Rmd file, build the .md version of the file using:
+
+```{r}
+build_readme()
+```
+
+Reference: [https://r-pkgs.org/whole-game.html#use_readme_rmd](https://r-pkgs.org/whole-game.html#use_readme_rmd)
+
+#### 8. Create a NEWS file
+
+```{r}
+use_news_md()
+```
+
+Edit the file as needed. It will be used as a change log for package version releases.
+
+Reference: [https://r-pkgs.org/other-markdown.html#sec-news](https://r-pkgs.org/other-markdown.html#sec-news)
+
+#### 9. Create package documentation
+
+This creates a dummy file to establish package level documentation:
+
+```{r}
+use_package_doc()
+```
+
+References:
+
+ - [https://r-pkgs.org/man.html#sec-man-package-doc](https://r-pkgs.org/man.html#sec-man-package-doc)
+ 
+
+### GitHub Actions
+
+#### 10. Automate R CMD check
+
+Every time you push the package to the remote repository, R CMD check will be run and system compatibility will be checked for a variety of OS's. 
+
+```{r}
+use_github_action("check-standard")
+```
+
+This will also add the R CMD check badge to the README.Rmd file so the README.md file should be re-built:
+
+```{r}
+build_readme()
+```
+
+Reference: [https://r-pkgs.org/software-development-practices.html#r-cmd-check-via-gha](https://r-pkgs.org/software-development-practices.html#r-cmd-check-via-gha)
+
+
+#### 11. Automate documentation and code styling for pull requests
+
+```{r}
+use_github_action("pr-commands")
+```
+
+
+### Functions and Function Documentation
+
+#### 12. Add .R files to the R directory
+
+```{r}
+use_r("[NEW R SCRIPT NAME]")
+```
+
+Reference: [https://r-pkgs.org/whole-game.html#use_r](https://r-pkgs.org/whole-game.html#use_r)
+
+#### 13. Import packages
+
+As functions from other packages are used (always use the `::` method in the code), add those packages as imports:
+
+```{r}
+use_package("[IMPORTED PACKAGE NAME]")
+```
+
+It's also a good idea to import {magritts}'s pipe operator:
+
+```{r}
+use_pipe(export = TRUE)
+```
+
+
+References: 
+
+ - [https://r-pkgs.org/whole-game.html#use_package](https://r-pkgs.org/whole-game.html#use_package)
+ 
+ - [https://usethis.r-lib.org/reference/use_pipe.html](https://usethis.r-lib.org/reference/use_pipe.html)
+
+
+#### 14. Create function documentation
+
+For each function in the R/ directory, create {roxygen2} comments using the references below, then build all the package documentation files by running:
+
+```{r}
+document()
+```
+
+References:
+
+ - [https://r-pkgs.org/man.html#sec-man-package-doc](https://r-pkgs.org/man.html#sec-man-package-doc)
+ 
+ - [https://r-pkgs.org/man.html](https://r-pkgs.org/man.html)
+ 
+ - [{roxygen2}](https://roxygen2.r-lib.org/)
+ 
+ 
+#### 15. Apply code styling using the {styler} package
+
+To style the entire package run:
+
+```{r}
+use_tidy_style()
+```
+
+Note: you should always commit changes immediately before and after running the above code to separate style changes from code changes in the git history.
+
+References:
+
+ - [https://r-pkgs.org/code.html#code-style](https://r-pkgs.org/code.html#code-style)
+ 
+ - [{styler}](https://styler.r-lib.org/)
+ 
+
+#### 16. Articles and vignettes
+
+Use articles and vignettes to provide package instructions and example workflows beyond what is in README.Rmd. Vignettes will be included with your package on install. Articles will not be included with your package on installation but will be available on the {pkgdown} website. These can be created using the functions:
+
+```{r}
+use_vignette("[NEW VIGNETTE NAME]")
+use_article("[NEW ARTICLE NAME]")
+```
+
+These functions will create then `vignette` and `vignette/articles` directories, respectively.
+ 
+Reference: [https://r-pkgs.org/vignettes.html](https://r-pkgs.org/vignettes.html)
+
+### Data Files
+
+There are five locations for storing/creating R package data files. Choosing a directory to use for a file depends on how the file is to be used and whether the user should have access to the file after they install your package.
+
+1. `data/`: this directory stores data files, in a native R format (ie .rda), that the user will have access to after package installation by calling [PACKAGE NAME]::[DATA OBJECT NAME]. Each data object should have its own .rda file.
+
+2. `R/sysdata.rda`: this is a file that stores all R data objects for internal package use. These data objects will not be available to the user after installation.
+
+3. `tests/testthat/fixtures`: this directory stores data files in any format that are used for unit testing only. See the 'Testing' section of this document for more information. By default these files can be accessed by the user after installation but cannot be called using the `::` operator like files in the `data/` directory.
+
+4. `inst/extdata`: this directory stores data files that should be available to the user after installation but which are not in a native R format (ie .csv). The package developer or end user can get the path to this directory by calling: `system.file("extdata", package = "[PACKAGE NAME]")`. These files cannot be called by using the `::` operator like files in the `data/` directory.
+
+5. `data-raw/`: this directory is for creating data in any of the above directories. `data-raw/` is not available to the user after installation.
+
+#### 17. Set-up raw data directory
+
+The function below will create an R script for creating data files. The first time it is called, it will also create the `data-raw/` directory.
+
+```{r}
+use_data_raw("[NEW DATA FILE NAME]")
+```
+
+It's good practice to have one R script in `data-raw/` for each data file in the package. At the end of each script, you will save the data object to one of the other four data locations.
+
+Reference: [https://r-pkgs.org/data.html#sec-data-data-raw](https://r-pkgs.org/data.html#sec-data-data-raw)
+
+
+#### 18. Create an exported data file in data\
+
+This step will create a file in the `data\` directory which will be available to a user after package installation. Data stored in this manner must be in a native R data format (ie `.rda`). For each script in `data-raw/` that is supposed to create an exported data file, call the function below at the end to save the file in the correct location:
+
+```{r}
+use_data("[NEW DATA FILE NAME]", overwrite = TRUE)
+```
+
+Reference: [https://r-pkgs.org/data.html#sec-data-data](https://r-pkgs.org/data.html#sec-data-data)
+
+#### 19. Document a data file in the data/ directory
+
+Every file in `data/' must have package documentation created using {roxygen2}. The documentation for all of the files in `data/` should reside in the `R/data.R` file. Create the file using:
+
+```{r}
+use_r("data.R")
+```
+
+Then populate it per the reference below.
+
+Reference: [https://r-pkgs.org/data.html#sec-documenting-data](https://r-pkgs.org/data.html#sec-documenting-data)
+
+
+#### 20. Create package internal data
+
+Internal package data will not be shared with the end users of the package. All internal data is stored in the R object `R/sysdata.rda`. You can create a script to create this object in `data-raw` like this:
+
+```{r}
+use_data_raw("sysdata")
+```
+
+At the end of the script call:
+
+```{r}
+use_data(..., overwrite = TRUE, internal = TRUE)
+```
+
+Reference: [https://r-pkgs.org/data.html#sec-data-sysdata](https://r-pkgs.org/data.html#sec-data-sysdata)
+
+#### 21. Use non-R data files
+
+Any non-R data files needed for examples that you want the user to have access to after installation should be stored in `inst/extdata`. They can be created under `data-raw` but at the end of the script should not call `usethis::use_data()`. Instead save them using something like:
+
+```{r}
+dir <- system.file("extdata", package = "[PACKAGE NAME]")
+write.csv(data, file = file.path(dir, "[FILE NAME].csv"))
+```
+
+Reference: [https://r-pkgs.org/data.html#sec-data-extdata](https://r-pkgs.org/data.html#sec-data-extdata)
+
+
+### Testing
+
+#### 22. Set-up {testthat}
+
+```{r}
+use_testthat()
+```
+
+Reference: [https://r-pkgs.org/testing-basics.html#initial-setup](https://r-pkgs.org/testing-basics.html#initial-setup)
+
+#### 23. Writing tests
+
+Create 1 test script for each file in `R/` that you want to test using:
+
+```{r}
+use_test("[NAME OF .R FILE IN R/]")
+```
+
+Populate the file according to the {testthat} convention using the references below.
+
+References:
+
+ - [https://r-pkgs.org/testing-basics.html#sec-tests-mechanics-workflow](https://r-pkgs.org/testing-basics.html#sec-tests-mechanics-workflow)
+ 
+ - [{testthat}](https://testthat.r-lib.org/)
+
+
+#### 24. Running tests
+
+You can run individual test functions inside a test file by highlighting and running that section of code. Make sure to always run `devtools::load_all()` first and after making any change to the file being tested.
+
+You can run all tests for a file in `R` using:
+
+```{r}
+test_file("[NAME OF .R FILE IN R/]")
+```
+
+Test the entire package by running:
+
+```{r}
+test()
+```
+
+
+References:
+
+ - [https://r-pkgs.org/testing-basics.html#sec-tests-mechanics-workflow](https://r-pkgs.org/testing-basics.html#sec-tests-mechanics-workflow)
+ 
+ - [{testthat}](https://testthat.r-lib.org/)
+
+
+#### 25. Testing helper functions and fixtures
+
+You can include test helper functions in a `.R` file below `tests/testthat`.  You can also include data files to assist with testing (called test fixtures) creating the directory `tests/testthat/fixtures`. It's a good idea to create the data files in the `data-raw/` directory (see the Data section of this document).
+
+References:
+
+ - [https://r-pkgs.org/testing-basics.html#sec-tests-mechanics-workflow](https://r-pkgs.org/testing-basics.html#sec-tests-mechanics-workflow)
+ 
+ - [https://r-pkgs.org/testing-advanced.html#test-fixtures](https://r-pkgs.org/testing-advanced.html#test-fixtures)
+ 
+
+#### 26. Prepare the testing coverage framework for CodeCov:
+
+```{r}
+use_coverage(type = "codecov")
+```
+
+The code above will also add a CodeCov badge the README so the README must be re-built:
+
+```{r}
+build_readme()
+```
+
+References:
+
+ - [https://usethis.r-lib.org/reference/use_coverage.html](https://usethis.r-lib.org/reference/use_coverage.html)
+
+
+#### 27. Check the test coverage for the package
+
+Before running the functions below, you must restart R:
+
+```{r}
+# this will produce a report in R Studio's Viewer window
+covr::report()
+
+# alternatively, this will print the results to the console
+covr::package_coverage()
+```
+
+This code will test an individual file:
+
+```{r}
+# this will produce a report in the R Studio Viewer window that will highlight 
+#  tested lines in green and untested lines in red
+devtools::test_coverage_active_file()
+
+# alternatively, this will print a report in the console
+covr::file_coverage("[PATH TO FILE IN R/ TO BE TESTED]", 
+                    "[PATH TO CORRESPONDING TEST FILE IN tests/testthat]")
+```
+
+References:
+ 
+ - [{covr}](https://covr.r-lib.org/) for unit testing automation
+ 
+ - [https://r-pkgs.org/testing-design.html#sec-testing-design-coverage](https://r-pkgs.org/testing-design.html#sec-testing-design-coverage)
+
+#### 28. Link the GitHub repo to CodeCov
+
+Sign into CodeCov, select the correct repo, and following the steps for GitHub Actions set-up. This will involve copying a token from CodeCov into a GitHub repo secret. Note the GitHub repo must be public for this to work. 
+
+Finally, add test coverage as a GitHub actions workflow:
+
+```{r}
+use_github_action("test-coverage")
+```
+
+References:
+
+ - [https://usethis.r-lib.org/reference/use_coverage.html](https://usethis.r-lib.org/reference/use_coverage.html)
+ 
+ - [{covr}](https://covr.r-lib.org/) for unit testing automation
+ 
+ - [https://r-pkgs.org/testing-design.html#sec-testing-design-coverage](https://r-pkgs.org/testing-design.html#sec-testing-design-coverage)
+
+
+### Website and Logo
+
+#### 29. Set-up a {pkgdown} website using GitHub Pages
+
+In this case, GitHub pages will be used to post the website. Every time you push to the remote, the website will be re-built.
+
+```{r}
+use_pkgdown_github_pages()
+```
+
+References:
+
+ - [https://r-pkgs.org/website.html#sec-website-deployment](https://r-pkgs.org/website.html#sec-website-deployment)
+ 
+ - [{pkgdown}](https://pkgdown.r-lib.org/)
+
+#### 30. Build and preview the site locally
+
+To initially create the files for building the site locally run:
+
+```{r}
+pkgdown::build_site()
+```
+
+To locally preview sections of the site run one of the `pkgdown::build_**()` functions.
+
+References:
+
+ - [https://r-pkgs.org/website.html#sec-website-deployment](https://r-pkgs.org/website.html#sec-website-deployment)
+ 
+ - [{pkgdown}](https://pkgdown.r-lib.org/)
+
+
+#### 31. Customize the reference index
+
+By default the reference page of the site will list all package functions in alphabetical order. To change this page and group packages into sections, see the reference below.
+
+Reference: [https://pkgdown.r-lib.org/reference/build_reference.html?q=subtitle#reference-index](https://pkgdown.r-lib.org/reference/build_reference.html?q=subtitle#reference-index)
+
+#### 32. Create a hex logo
+
+The package logo will be displayed in your README file and on the {pkgdown} website. Design your logo using [hexmake](https://connect.thinkr.fr/hexmake/). Use [flaticon.com](https://www.flaticon.com/) for the icon inside the hex logo if you wish. 
+
+Implement using:
+
+```{r}
+use_logo("[PATH TO LOGO]")
+```
+
+The code ran in the previous chunk will add html code to your clipboard. Paste that into README.Rmd where the title is. Then rebuild the README:
+
+```{r}
+build_readme()
+```
+
+Reference: [https://r-pkgs.org/website.html#logo](https://r-pkgs.org/website.html#logo)
+
+
+## Post set-up workflow
+
+After the above set-up steps are complete the iterative workflow steps are generally to load the current package, test it, document it, and run R CMD check. After which, run the git commands add, commit, and push.
+
+Iteratively develop the code in one file in `R/` using:
+
+```{r}
+# update global environment with recent package changes
+load_all()
+
+# test the file being worked on
+test_active_file()
+```
+
+Once you are satisfied with the change test the entire package using:
+
+```{r}
+test()
+```
+
+Update the package documentation using:
+
+```{r}
+document()
+
+# when changes to the README are made, also run
+build_readme()
+```
+
+Run R CMD check:
+
+```{r}
+check()
+```
+
+If R CMD check passes, with 0 errors and 0 warnings, commit the changes to the repo using the standard git command add, commit, and push in the terminal.
+
+Reference: [{devtools} cheatsheet](https://devtools.r-lib.org/)
+
+
+## References
+
+The primary reference used is the book [R Packages (2e)](https://r-pkgs.org/) by Hadley Wickham and Jennifer Bryan. Other references include:
+
+ - [{usethis}](https://usethis.r-lib.org/index.html) for package development tools
+ 
+ - [{devtools}](https://devtools.r-lib.org/) and the {devtools} cheatsheet for package development tools
+ 
+ - [{testthat}](https://testthat.r-lib.org/) for unit tests
+ 
+ - [{covr}](https://covr.r-lib.org/) for unit testing automation
+ 
+ - [{roxygen2}](https://roxygen2.r-lib.org/) for documentation
+ 
+ - [{pkgdown}](https://pkgdown.r-lib.org/) for building package websites
+ 
+ - [{styler}](https://styler.r-lib.org/) for code styling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
