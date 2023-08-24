@@ -1648,7 +1648,7 @@ use_github()</code></pre>
 <p>Update these fields:</p>
 <ul>
 <li><p>Title</p></li>
-<li><p>Authors (this should be auto-populated if you followed the <a href="https://usethis.r-lib.org/articles/usethis-setup.html">the
+<li><p>Authors (this should be auto-populated if you followed <a href="https://usethis.r-lib.org/articles/usethis-setup.html">the
 {usethis} set-up guide</a>)</p></li>
 <li><p>Description</p></li>
 <li><p>Chose a license:</p></li>
@@ -1705,6 +1705,11 @@ the README.md file should be re-built:</p>
 </div>
 <div id="e.-functions-and-function-documentation" class="section level3">
 <h3>E. Functions and Function Documentation</h3>
+<p>Steps 12 through 14 outline how to build the core of your package:
+the code base. Instead of building the entire code base and then
+creating your tests, I recommend you that you iteratively build the code
+base and test it as you go. See section I Testing for instructions on
+how to set-up your testing suite.</p>
 <div id="add-your-code" class="section level4">
 <h4>12. Add your code</h4>
 <p>Your package code must exist in .R files in the <code>R/</code>
@@ -1765,7 +1770,7 @@ the git history.</p>
 <p>Use articles and vignettes to provide package instructions and
 example workflows beyond what is in README.Rmd. Vignettes will be
 included with your package on install. Articles will not be included
-with your package on installation but will be available on the {pkgdown}
+with your package on install but will be available on the {pkgdown}
 website. These can be created using the functions:</p>
 <pre class="r"><code>use_vignette(&quot;[NEW VIGNETTE NAME]&quot;)
 use_article(&quot;[NEW ARTICLE NAME]&quot;)</code></pre>
@@ -1793,29 +1798,28 @@ R format (ie .rda), that the user will have access to after package
 installation after calling [PACKAGE NAME]::[DATA OBJECT NAME] or by
 calling <code>library([PACKAGE NAME])</code> and then referring to the
 DATA OBJECT NAME. Each data object should have its own .rda file and
-must be documented. See steps 18 and 19. As the package developer, can
-load these data files into your environment using
-<code>load_all()</code>.</p></li>
+must be documented. As the package developer, can load these data files
+into your environment using <code>load_all()</code>. See steps 18 and
+19.</p></li>
 <li><p><code>R/sysdata.rda</code>: this is a file that stores all R data
 objects for internal package use. These data objects will not be
-available to the user after installation. See step 20. As the package
-developer, can load these data files into your environment using
-<code>load_all()</code>.</p></li>
+available to the user after installation. As the package developer, can
+load these data files into your environment using
+<code>load_all()</code>. See step 20.</p></li>
 <li><p><code>inst/extdata</code>: this directory stores data files that
 should be available to the user after installation but which are not in
-a native R format (ie .csv). See step 21. These files cannot be called
-directly as R objects by the end user and <code>load_all()</code> will
-not make these available in the developer’s environment. The package
-developer or end user can get the path to a data file in this directory
-by calling
+a native R format (ie .csv). These files cannot be called directly as R
+objects by the end user and <code>load_all()</code> will not make these
+available in the developer’s environment. The package developer or end
+user can get the path to a data file in this directory by calling
 <code>system.file(&quot;extdata/[DATA FILE NAME]&quot;, package = &quot;[PACKAGE NAME]&quot;)</code>
 and then load that file into the global environment by calling the
-appropriate read function (ie <code>read.csv()</code>).</p></li>
+appropriate read function (ie <code>read.csv()</code>). See step
+21.</p></li>
 <li><p><code>tests/testthat/fixtures</code>: this directory stores data
-files in any format that are used for unit testing. See the ‘Testing’
-section, specifically step 25, of this article for more information. By
-default, these files can be accessed by the user after installation.
-These files cannot be called directly as R objects by the end user and
+files in any format that are used for unit testing. By default, these
+files can be accessed by the user after installation. These files cannot
+be called directly as R objects by the end user and
 <code>load_all()</code> will not make these available in the developer’s
 environment. The package developer can get the path to a data file in
 this directory by calling
@@ -1823,7 +1827,9 @@ this directory by calling
 file into the global environment by calling the appropriate read
 function (ie <code>read.csv()</code>). An end users would need to
 specify the full path to the file in their R library directory and then
-call the appropriate read function.</p></li>
+call the appropriate read function. These types of data files will not
+be addressed in this section, instead see the section I Testing,
+specifically step 25.</p></li>
 </ol>
 <div id="set-up-the-raw-data-directory" class="section level4">
 <h4>17. Set-up the raw data directory</h4>
@@ -1837,9 +1843,8 @@ the data object to one of the other four data locations.</p>
 <p>Reference: <a href="https://r-pkgs.org/data.html#sec-data-data-raw">https://r-pkgs.org/data.html#sec-data-data-raw</a></p>
 </div>
 <div id="create-an-exported-data-file-in-data" class="section level4">
-<h4>18. Create an exported data file in data<br />
-</h4>
-<p>This step will create a file in the <code>data\</code> directory
+<h4>18. Create an exported data file in data/</h4>
+<p>This step will create a file in the <code>data/</code> directory
 which will be available to a user after package installation. Data
 stored in this manner must be in a native R data format (ie
 <code>.rda</code>). For each script in <code>data-raw/</code> that is
@@ -1922,10 +1927,10 @@ being tested.</p>
 <p>You can include test helper functions by creating the file
 <code>tests/testthat/helpers.R</code>.</p>
 <p>You can also include data files to assist with testing (called test
-fixtures) creating the directory <code>tests/testthat/fixtures</code>
+fixtures) by creating the directory <code>tests/testthat/fixtures</code>
 and storing them there. These can be native R files or not. It’s a good
-idea to create these data files in the <code>data-raw/</code> directory
-(see section H. Data Files).</p>
+idea to create these data files in the <code>data-raw/</code> directory.
+Also see section H. Data Files.</p>
 <p>References:</p>
 <ul>
 <li><p><a href="https://r-pkgs.org/testing-basics.html#sec-tests-mechanics-workflow">https://r-pkgs.org/testing-basics.html#sec-tests-mechanics-workflow</a></p></li>
@@ -1935,22 +1940,22 @@ idea to create these data files in the <code>data-raw/</code> directory
 <div id="prepare-the-testing-coverage-framework-for-codecov" class="section level4">
 <h4>26. Prepare the testing coverage framework for CodeCov</h4>
 <pre class="r"><code>use_coverage(type = &quot;codecov&quot;)</code></pre>
-<p>The code above will also add a CodeCov badge the README so the README
-must be re-built:</p>
+<p>The code above will also add a CodeCov badge to the README so the
+README must be re-built:</p>
 <pre class="r"><code>build_readme()</code></pre>
 <p>Reference: <a href="https://usethis.r-lib.org/reference/use_coverage.html">https://usethis.r-lib.org/reference/use_coverage.html</a></p>
 </div>
 <div id="check-the-test-coverage" class="section level4">
 <h4>27. Check the test coverage</h4>
 <p>To check test coverage for the entire package run one of the two
-lines of code below, depending the output type you want to see. Note
+lines of code below, depending the output type you want to see. Note,
 before running the functions below, you must restart R.</p>
 <pre class="r"><code># this will produce a report in R Studio&#39;s Viewer window
 covr::report()
 
 # alternatively, this will print the results to the console
 covr::package_coverage()</code></pre>
-<p>To check test coverage for an individual file run the following line
+<p>To check test coverage for an individual file, run the following line
 of code which will produce a report in the R Studio Viewer window that
 will highlight which lines of code are tested and which are not
 tested.</p>
@@ -1964,11 +1969,11 @@ automation</p></li>
 </div>
 <div id="link-the-github-repo-to-codecov" class="section level4">
 <h4>28. Link the GitHub repo to CodeCov</h4>
-<p>Sign into CodeCov, select the correct repo, and following the steps
+<p>Sign-in to CodeCov, select the correct repo, and following the steps
 for GitHub Actions set-up. This will involve copying a token from
-CodeCov into a GitHub repo secret. Note the GitHub repo must be public
+CodeCov into a GitHub repo secret. Note, the GitHub repo must be public
 for this to work.</p>
-<p>Finally, add test coverage as a GitHub actions workflow:</p>
+<p>Finally, add test coverage as a GitHub Actions workflow:</p>
 <pre class="r"><code>use_github_action(&quot;test-coverage&quot;)</code></pre>
 <p>References:</p>
 <ul>
@@ -1983,8 +1988,9 @@ automation</p></li>
 <h3>J. Website and Logo</h3>
 <div id="set-up-a-pkgdown-website-using-github-pages" class="section level4">
 <h4>29. Set-up a {pkgdown} website using GitHub Pages</h4>
-<p>GitHub pages will be used to host the website. Every time you push to
-the remote, the website will be re-built.</p>
+<p>GitHub Pages will be used to host the website. Every time you push to
+the remote, the website will be re-built. Run the line of code below
+once to set up:</p>
 <pre class="r"><code>use_pkgdown_github_pages()</code></pre>
 <p>References:</p>
 <ul>
@@ -1994,10 +2000,15 @@ the remote, the website will be re-built.</p>
 </div>
 <div id="build-and-preview-the-site-locally" class="section level4">
 <h4>30. Build and preview the site locally</h4>
-<p>To initially create the files for building the site locally run:</p>
+<p>The step above set-up a GitHub Pages workflow to re-build your public
+site with every push but, it’s often helpful to check potential changes
+to your website on your local machine prior to publishing them. Running
+the line of code below will allow you to preview your site locally.</p>
 <pre class="r"><code>pkgdown::build_site()</code></pre>
-<p>To locally preview sections of the site run one of the
-<code>pkgdown::build_**()</code> functions.</p>
+<p>After running the line of code above once, you will be able to
+locally preview individual sections of the site, instead of the whole
+site, by calling one of the <code>pkgdown::build_*()</code>
+functions.</p>
 <p>References:</p>
 <ul>
 <li><p><a href="https://r-pkgs.org/website.html#sec-website-deployment">https://r-pkgs.org/website.html#sec-website-deployment</a></p></li>
@@ -2006,14 +2017,14 @@ the remote, the website will be re-built.</p>
 </div>
 <div id="customize-the-reference-index-optional" class="section level4">
 <h4>31. Customize the reference index (optional)</h4>
-<p>By default the reference page of the site will list all package
+<p>By default, the reference page of the site will list all package
 functions in alphabetical order. To change this page and group packages
 into sections, see the reference below.</p>
 <p>Reference: <a href="https://pkgdown.r-lib.org/reference/build_reference.html?q=subtitle#reference-index">https://pkgdown.r-lib.org/reference/build_reference.html?q=subtitle#reference-index</a></p>
 </div>
 <div id="create-a-hex-logo-optional" class="section level4">
 <h4>32. Create a hex logo (optional)</h4>
-<p>The package logo will be displayed in your README file and on the
+<p>Your package logo will be displayed in your README file and on the
 {pkgdown} website and really makes your package stand-out and look
 professional.</p>
 <p>Design your logo using <a href="https://connect.thinkr.fr/hexmake/">hexmake</a> and download the
@@ -2021,41 +2032,57 @@ professional.</p>
 your package and configure it using:</p>
 <pre class="r"><code>use_logo(&quot;[PATH TO LOGO]&quot;)</code></pre>
 <p>The code ran in the previous chunk will add html code to your
-clipboard. Paste that into README.Rmd where the title is. Then rebuild
-the README:</p>
+clipboard. Paste that into README.Rmd where the title is and then
+rebuild the README:</p>
 <pre class="r"><code>build_readme()</code></pre>
+<p>Next, to update your {pkgdown} site with your logo, follow the normal
+workflow steps to push your changes to the remote repo.</p>
 <p>Reference: <a href="https://r-pkgs.org/website.html#logo">https://r-pkgs.org/website.html#logo</a></p>
 </div>
 </div>
 </div>
 <div id="post-set-up-workflow" class="section level2">
 <h2>Post Set-up workflow</h2>
-<p>The iterative workflow steps are generally to develop your package
-code, re-load the package into the global environment, test it, document
-it, run R CMD check, then commit and push your changes to GitHub. The
-specific steps are outlined below.</p>
-<p>Iteratively develop the code in one file in <code>R/</code>
-using:</p>
+<p>Once you have completed sections A through D and begin working on
+section E, it’s time to start using the iterative workflow for package
+development below. Following this process is good practice to ensure a
+quality R package that is tested and documented.</p>
+<ol style="list-style-type: decimal">
+<li>Iteratively develop the code in one file in <code>R/</code>
+using:</li>
+</ol>
 <pre class="r"><code># update global environment with recent package changes
 load_all()
 
 # test the file being worked on by running sections of the test file or by running:
 test_active_file()</code></pre>
-<p>Once you are satisfied with the changes, test the entire package
-using:</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Once you are satisfied with the changes, test the entire package
+using:</li>
+</ol>
 <pre class="r"><code>test()</code></pre>
-<p>Update the package documentation using:</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Update the package documentation using:</li>
+</ol>
 <pre class="r"><code>document()
 
 # when changes to the README are made, also run
 build_readme()</code></pre>
-<p>Run R CMD check:</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Run R CMD check:</li>
+</ol>
 <pre class="r"><code>check()</code></pre>
-<p>If R CMD check passes, with 0 errors and 0 warnings, commit the
+<ol start="5" style="list-style-type: decimal">
+<li>If R CMD check passes with 0 errors and 0 warnings, commit the
 changes to the repo using the standard git commands add, commit, and
-push in the terminal.</p>
-<p>Reference: <a href="https://devtools.r-lib.org/">{devtools}
-cheatsheet</a></p>
+push in the terminal.</li>
+</ol>
+<p>References:</p>
+<ul>
+<li><p><a href="https://devtools.r-lib.org/">{devtools}
+cheatsheet</a></p></li>
+<li><p><a href="https://r-pkgs.org/workflow101.html#sec-workflow101-r-cmd-check">https://r-pkgs.org/workflow101.html#sec-workflow101-r-cmd-check</a></p></li>
+</ul>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>

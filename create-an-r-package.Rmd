@@ -222,6 +222,8 @@ Reference: [https://usethis.r-lib.org/reference/github_actions.html#use-github-a
 
 ### E. Functions and Function Documentation
 
+Steps 12 through 14 outline how to build the core of your package: the code base. Instead of building the entire code base and then creating your tests, I recommend you that you iteratively build the code base and test it as you go. See section I Testing for instructions on how to set-up your testing suite. 
+
 #### 12. Add your code
 
 Your package code must exist in .R files in the `R/` directory. Create each .R file using:
@@ -292,7 +294,7 @@ References:
 
 #### 16. Articles and vignettes
 
-Use articles and vignettes to provide package instructions and example workflows beyond what is in README.Rmd. Vignettes will be included with your package on install. Articles will not be included with your package on installation but will be available on the {pkgdown} website. These can be created using the functions:
+Use articles and vignettes to provide package instructions and example workflows beyond what is in README.Rmd. Vignettes will be included with your package on install. Articles will not be included with your package on install but will be available on the {pkgdown} website. These can be created using the functions:
 
 ```{r}
 use_vignette("[NEW VIGNETTE NAME]")
@@ -309,13 +311,13 @@ There are five locations for storing/creating R package data files. Choosing a d
 
 1. `data-raw/`: this directory can store raw data files and is used for creating data in any of the other data directories below. Nothing in `data-raw/` will be available to end users after installation and `load_all()` does not load any data files in this directory into the developer's environment. See step 17.
 
-2. `data/`: this directory stores data files, in a native R format (ie .rda), that the user will have access to after package installation after calling [PACKAGE NAME]::[DATA OBJECT NAME] or by calling `library([PACKAGE NAME])` and then referring to the DATA OBJECT NAME. Each data object should have its own .rda file and must be documented. See steps 18 and 19. As the package developer, can load these data files into your environment using `load_all()`. 
+2. `data/`: this directory stores data files, in a native R format (ie .rda), that the user will have access to after package installation after calling [PACKAGE NAME]::[DATA OBJECT NAME] or by calling `library([PACKAGE NAME])` and then referring to the DATA OBJECT NAME. Each data object should have its own .rda file and must be documented. As the package developer, can load these data files into your environment using `load_all()`. See steps 18 and 19. 
 
-3. `R/sysdata.rda`: this is a file that stores all R data objects for internal package use. These data objects will not be available to the user after installation. See step 20. As the package developer, can load these data files into your environment using `load_all()`. 
+3. `R/sysdata.rda`: this is a file that stores all R data objects for internal package use. These data objects will not be available to the user after installation. As the package developer, can load these data files into your environment using `load_all()`. See step 20. 
 
-4. `inst/extdata`: this directory stores data files that should be available to the user after installation but which are not in a native R format (ie .csv). See step 21. These files cannot be called directly as R objects by the end user and `load_all()` will not make these available in the developer's environment. The package developer or end user can get the path to a data file in this directory by calling `system.file("extdata/[DATA FILE NAME]", package = "[PACKAGE NAME]")` and then load that file into the global environment by calling the appropriate read function (ie `read.csv()`).
+4. `inst/extdata`: this directory stores data files that should be available to the user after installation but which are not in a native R format (ie .csv). These files cannot be called directly as R objects by the end user and `load_all()` will not make these available in the developer's environment. The package developer or end user can get the path to a data file in this directory by calling `system.file("extdata/[DATA FILE NAME]", package = "[PACKAGE NAME]")` and then load that file into the global environment by calling the appropriate read function (ie `read.csv()`). See step 21. 
 
-5. `tests/testthat/fixtures`: this directory stores data files in any format that are used for unit testing. See the 'Testing' section, specifically step 25, of this article for more information. By default, these files can be accessed by the user after installation. These files cannot be called directly as R objects by the end user and `load_all()` will not make these available in the developer's environment. The package developer can get the path to a data file in this directory by calling `testthat::test_path("[DATA FILE NAME]")` and then load that file into the global environment by calling the appropriate read function (ie `read.csv()`). An end users would need to specify the full path to the file in their R library directory and then call the appropriate read function.
+5. `tests/testthat/fixtures`: this directory stores data files in any format that are used for unit testing. By default, these files can be accessed by the user after installation. These files cannot be called directly as R objects by the end user and `load_all()` will not make these available in the developer's environment. The package developer can get the path to a data file in this directory by calling `testthat::test_path("[DATA FILE NAME]")` and then load that file into the global environment by calling the appropriate read function (ie `read.csv()`). An end users would need to specify the full path to the file in their R library directory and then call the appropriate read function. These types of data files will not be addressed in this section, instead see the section I Testing, specifically step 25. 
 
 
 #### 17. Set-up the raw data directory
@@ -331,9 +333,9 @@ It's good practice to have one R script in `data-raw/` for each data file in the
 Reference: [https://r-pkgs.org/data.html#sec-data-data-raw](https://r-pkgs.org/data.html#sec-data-data-raw)
 
 
-#### 18. Create an exported data file in data\
+#### 18. Create an exported data file in data/
 
-This step will create a file in the `data\` directory which will be available to a user after package installation. Data stored in this manner must be in a native R data format (ie `.rda`). For each script in `data-raw/` that is supposed to create an exported data file, call the function below at the end to save the file in the correct location:
+This step will create a file in the `data/` directory which will be available to a user after package installation. Data stored in this manner must be in a native R data format (ie `.rda`). For each script in `data-raw/` that is supposed to create an exported data file, call the function below at the end to save the file in the correct location:
 
 ```{r}
 use_data("[NEW DATA FILE NAME]", overwrite = TRUE)
@@ -437,7 +439,7 @@ References:
 
 You can include test helper functions by creating the file `tests/testthat/helpers.R`.  
 
-You can also include data files to assist with testing (called test fixtures) creating the directory `tests/testthat/fixtures` and storing them there. These can be native R files or not. It's a good idea to create these data files in the `data-raw/` directory (see section H. Data Files).
+You can also include data files to assist with testing (called test fixtures) by creating the directory `tests/testthat/fixtures` and storing them there. These can be native R files or not. It's a good idea to create these data files in the `data-raw/` directory. Also see section H. Data Files.
 
 References:
 
@@ -452,7 +454,7 @@ References:
 use_coverage(type = "codecov")
 ```
 
-The code above will also add a CodeCov badge the README so the README must be re-built:
+The code above will also add a CodeCov badge to the README so the README must be re-built:
 
 ```{r}
 build_readme()
@@ -463,7 +465,7 @@ Reference: [https://usethis.r-lib.org/reference/use_coverage.html](https://useth
 
 #### 27. Check the test coverage
 
-To check test coverage for the entire package run one of the two lines of code below, depending the output type you want to see. Note before running the functions below, you must restart R.
+To check test coverage for the entire package run one of the two lines of code below, depending the output type you want to see. Note, before running the functions below, you must restart R.
 
 ```{r}
 # this will produce a report in R Studio's Viewer window
@@ -473,7 +475,7 @@ covr::report()
 covr::package_coverage()
 ```
 
-To check test coverage for an individual file run the following line of code which will produce a report in the R Studio Viewer window that will highlight which lines of code are tested and which are not tested.
+To check test coverage for an individual file, run the following line of code which will produce a report in the R Studio Viewer window that will highlight which lines of code are tested and which are not tested.
 
 ```{r}
 devtools::test_coverage_active_file()
@@ -487,9 +489,9 @@ References:
 
 #### 28. Link the GitHub repo to CodeCov
 
-Sign into CodeCov, select the correct repo, and following the steps for GitHub Actions set-up. This will involve copying a token from CodeCov into a GitHub repo secret. Note the GitHub repo must be public for this to work. 
+Sign-in to CodeCov, select the correct repo, and following the steps for GitHub Actions set-up. This will involve copying a token from CodeCov into a GitHub repo secret. Note, the GitHub repo must be public for this to work. 
 
-Finally, add test coverage as a GitHub actions workflow:
+Finally, add test coverage as a GitHub Actions workflow:
 
 ```{r}
 use_github_action("test-coverage")
@@ -508,7 +510,7 @@ References:
 
 #### 29. Set-up a {pkgdown} website using GitHub Pages
 
-GitHub pages will be used to host the website. Every time you push to the remote, the website will be re-built.
+GitHub Pages will be used to host the website. Every time you push to the remote, the website will be re-built. Run the line of code below once to set up:
 
 ```{r}
 use_pkgdown_github_pages()
@@ -522,13 +524,13 @@ References:
 
 #### 30. Build and preview the site locally
 
-To initially create the files for building the site locally run:
+The step above set-up a GitHub Pages workflow to re-build your public site with every push but, it's often helpful to check potential changes to your website on your local machine prior to publishing them. Running the line of code below will allow you to preview your site locally.
 
 ```{r}
 pkgdown::build_site()
 ```
 
-To locally preview sections of the site run one of the `pkgdown::build_**()` functions.
+After running the line of code above once, you will be able to locally preview individual sections of the site, instead of the whole site, by calling one of the `pkgdown::build_*()` functions.
 
 References:
 
@@ -539,13 +541,13 @@ References:
 
 #### 31. Customize the reference index (optional)
 
-By default the reference page of the site will list all package functions in alphabetical order. To change this page and group packages into sections, see the reference below.
+By default, the reference page of the site will list all package functions in alphabetical order. To change this page and group packages into sections, see the reference below.
 
 Reference: [https://pkgdown.r-lib.org/reference/build_reference.html?q=subtitle#reference-index](https://pkgdown.r-lib.org/reference/build_reference.html?q=subtitle#reference-index)
 
 #### 32. Create a hex logo (optional)
 
-The package logo will be displayed in your README file and on the {pkgdown} website and really makes your package stand-out and look professional. 
+Your package logo will be displayed in your README file and on the {pkgdown} website and really makes your package stand-out and look professional. 
 
 Design your logo using [hexmake](https://connect.thinkr.fr/hexmake/) and download the .png file to a directory outside of your package. Move your logo into your package and configure it using:
 
@@ -553,20 +555,22 @@ Design your logo using [hexmake](https://connect.thinkr.fr/hexmake/) and downloa
 use_logo("[PATH TO LOGO]")
 ```
 
-The code ran in the previous chunk will add html code to your clipboard. Paste that into README.Rmd where the title is. Then rebuild the README:
+The code ran in the previous chunk will add html code to your clipboard. Paste that into README.Rmd where the title is and then rebuild the README:
 
 ```{r}
 build_readme()
 ```
+
+Next, to update your {pkgdown} site with your logo, follow the normal workflow steps to push your changes to the remote repo.
 
 Reference: [https://r-pkgs.org/website.html#logo](https://r-pkgs.org/website.html#logo)
 
 
 ## Post Set-up workflow
 
-The iterative workflow steps are generally to develop your package code, re-load the package into the global environment, test it, document it, run R CMD check, then commit and push your changes to GitHub. The specific steps are outlined below.
+Once you have completed sections A through D and begin working on section E, it's time to start using the iterative workflow for package development below. Following this process is good practice to ensure a quality R package that is tested and documented. 
 
-Iteratively develop the code in one file in `R/` using:
+1. Iteratively develop the code in one file in `R/` using:
 
 ```{r}
 # update global environment with recent package changes
@@ -576,13 +580,13 @@ load_all()
 test_active_file()
 ```
 
-Once you are satisfied with the changes, test the entire package using:
+2. Once you are satisfied with the changes, test the entire package using:
 
 ```{r}
 test()
 ```
 
-Update the package documentation using:
+3. Update the package documentation using:
 
 ```{r}
 document()
@@ -591,15 +595,19 @@ document()
 build_readme()
 ```
 
-Run R CMD check:
+4. Run R CMD check:
 
 ```{r}
 check()
 ```
 
-If R CMD check passes, with 0 errors and 0 warnings, commit the changes to the repo using the standard git commands add, commit, and push in the terminal.
+5. If R CMD check passes with 0 errors and 0 warnings, commit the changes to the repo using the standard git commands add, commit, and push in the terminal.
 
-Reference: [{devtools} cheatsheet](https://devtools.r-lib.org/)
+References: 
+
+- [{devtools} cheatsheet](https://devtools.r-lib.org/)
+
+- [https://r-pkgs.org/workflow101.html#sec-workflow101-r-cmd-check](https://r-pkgs.org/workflow101.html#sec-workflow101-r-cmd-check)
 
 
 ## References
@@ -608,7 +616,7 @@ The primary reference used is the book [R Packages (2e)](https://r-pkgs.org/) by
 
  - [{usethis}](https://usethis.r-lib.org/index.html) for package development tools
  
- - [{devtools}](https://devtools.r-lib.org/) and the {devtools} cheatsheet for package development tools
+ - [{devtools}](https://devtools.r-lib.org/) and the {devtools} cheat sheet for package development tools
  
  - [{testthat}](https://testthat.r-lib.org/) for unit tests
  
